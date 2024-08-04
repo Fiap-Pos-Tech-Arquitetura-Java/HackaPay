@@ -1,14 +1,14 @@
 services:
   user:
     build:
-      context: https://github.com/Fiap-Pos-Tech-Arquitetura-Java/GoodBuy-User.git
+      context: https://github.com/Fiap-Pos-Tech-Arquitetura-Java/HackaPay-Usuario.git
     ports:
       - "8080:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=development
       - SPRING_DATASOURCE_URL=jdbc:postgresql://user-db:5432/user-db
-      - SPRING_DATASOURCE_USERNAME=goodBuy
-      - SPRING_DATASOURCE_PASSWORD=goodBuyUser
+      - SPRING_DATASOURCE_USERNAME=hackaPay
+      - SPRING_DATASOURCE_PASSWORD=hackaPayUser
       - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
       - logging.level.org.springframework.web=TRACE
       - org.springframework.cloud.config=DEBUG
@@ -17,7 +17,6 @@ services:
       - network
     restart: always
     depends_on:
-      - config-container
       - user-db
 
   user-db:
@@ -25,92 +24,89 @@ services:
     command: -p 5432
     environment:
       POSTGRES_DB: user-db
-      POSTGRES_USER: goodBuy
-      POSTGRES_PASSWORD: goodBuyUser
+      POSTGRES_USER: hackaPay
+      POSTGRES_PASSWORD: hackaPayUser
     networks:
       - network
 
-  item:
+  cliente:
     build:
-      context: https://github.com/Fiap-Pos-Tech-Arquitetura-Java/GoodBuy-Item.git
+      context: https://github.com/Fiap-Pos-Tech-Arquitetura-Java/HackaPay-Cliente.git
     ports:
       - "8081:8081"
     environment:
       - SPRING_PROFILES_ACTIVE=development
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://item-db:5433/item-db
-      - SPRING_DATASOURCE_USERNAME=goodBuy
-      - SPRING_DATASOURCE_PASSWORD=goodBuyItem
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://cliente-db:5433/cliente-db
+      - SPRING_DATASOURCE_USERNAME=hackaPay
+      - SPRING_DATASOURCE_PASSWORD=hackaPayCliente
       - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
     networks:
       - network
     restart: always
     depends_on:
-      - config-container
-      - item-db
+      - cliente-db
 
-  item-db:
+  cliente-db:
     image: postgres:latest
     command: -p 5433
     environment:
-      POSTGRES_DB: item-db
-      POSTGRES_USER: goodBuy
-      POSTGRES_PASSWORD: goodBuyItem
+      POSTGRES_DB: cliente-db
+      POSTGRES_USER: hackaPay
+      POSTGRES_PASSWORD: hackaPayCliente
     networks:
       - network
 
-  shop-cart:
+  cartao:
     build:
-      context: https://github.com/Fiap-Pos-Tech-Arquitetura-Java/GoodBuy-ShopCart.git
+      context: https://github.com/Fiap-Pos-Tech-Arquitetura-Java/HackaPay-Cartao.git
     ports:
       - "8082:8082"
     environment:
       - SPRING_PROFILES_ACTIVE=development
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://shop-cart-db:5434/shop-cart-db
-      - SPRING_DATASOURCE_USERNAME=goodBuy
-      - SPRING_DATASOURCE_PASSWORD=goodBuyShopCart
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://cartao-db:5434/cartao-db
+      - SPRING_DATASOURCE_USERNAME=hackaPay
+      - SPRING_DATASOURCE_PASSWORD=hackaPayCartao
       - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
     networks:
       - network
     restart: always
     depends_on:
-      - config-container
-      - shop-cart-db
+      - cartao-db
 
-  shop-cart-db:
+  cartao-db:
     image: postgres:latest
     command: -p 5434
     environment:
-      POSTGRES_DB: shop-cart-db
-      POSTGRES_USER: goodBuy
-      POSTGRES_PASSWORD: goodBuyShopCart
+      POSTGRES_DB: cartao-db
+      POSTGRES_USER: hackaPay
+      POSTGRES_PASSWORD: hackaPayCartao
     networks:
       - network
 
-  payment:
+  pagamento:
     build:
-      context: https://github.com/Fiap-Pos-Tech-Arquitetura-Java/GoodBuy-Payment.git
+      context: https://github.com/Fiap-Pos-Tech-Arquitetura-Java/HackaPay-Pagamento.git
     ports:
       - "8083:8083"
     environment:
       - SPRING_PROFILES_ACTIVE=development
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://payment-db:5435/payment-db
-      - SPRING_DATASOURCE_USERNAME=goodBuy
-      - SPRING_DATASOURCE_PASSWORD=goodBuyPayment
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://pagamento-db:5435/pagamento-db
+      - SPRING_DATASOURCE_USERNAME=hackaPay
+      - SPRING_DATASOURCE_PASSWORD=hackaPayPagamento
       - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
     networks:
       - network
     restart: always
     depends_on:
-      - config-container
-      - payment-db
+      - pagamento-db
 
-  payment-db:
+  pagamento-db:
     image: postgres:latest
     command: -p 5435
     environment:
-      POSTGRES_DB: payment-db
-      POSTGRES_USER: goodBuy
-      POSTGRES_PASSWORD: goodBuyPayment
+      POSTGRES_DB: pagamento-db
+      POSTGRES_USER: hackaPay
+      POSTGRES_PASSWORD: hackaPayPagamento
     networks:
       - network
 
@@ -119,26 +115,14 @@ services:
       context: .
     ports:
       - "80:80"
-    environment:
-      - SPRING_PROFILES_ACTIVE=development
     networks:
       - network
     restart: always
     depends_on:
-      - config-container
       - user
-      - item
-      - shop-cart
-      - payment
-
-  config-container:
-    build:
-      context: https://github.com/Fiap-Pos-Tech-Arquitetura-Java/GoodBuy-Config.git
-    command: -p 8085
-    ports:
-      - 8085:8085
-    networks:
-      - network
+      - cliente
+      - cartao
+      - pagamento
 
 networks:
   network:
