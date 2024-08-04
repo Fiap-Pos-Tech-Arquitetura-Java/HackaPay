@@ -1,0 +1,144 @@
+services:
+  user:
+    build:
+      context: https://github.com/Fiap-Pos-Tech-Arquitetura-Java/GoodBuy-User.git
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=development
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://user-db:5432/user-db
+      - SPRING_DATASOURCE_USERNAME=goodBuy
+      - SPRING_DATASOURCE_PASSWORD=goodBuyUser
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
+      - logging.level.org.springframework.web=TRACE
+      - org.springframework.cloud.config=DEBUG
+      - logging.level.org.apache.http=DEBUG
+    networks:
+      - network
+    restart: always
+    depends_on:
+      - config-container
+      - user-db
+
+  user-db:
+    image: postgres:latest
+    command: -p 5432
+    environment:
+      POSTGRES_DB: user-db
+      POSTGRES_USER: goodBuy
+      POSTGRES_PASSWORD: goodBuyUser
+    networks:
+      - network
+
+  item:
+    build:
+      context: https://github.com/Fiap-Pos-Tech-Arquitetura-Java/GoodBuy-Item.git
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=development
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://item-db:5433/item-db
+      - SPRING_DATASOURCE_USERNAME=goodBuy
+      - SPRING_DATASOURCE_PASSWORD=goodBuyItem
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
+    networks:
+      - network
+    restart: always
+    depends_on:
+      - config-container
+      - item-db
+
+  item-db:
+    image: postgres:latest
+    command: -p 5433
+    environment:
+      POSTGRES_DB: item-db
+      POSTGRES_USER: goodBuy
+      POSTGRES_PASSWORD: goodBuyItem
+    networks:
+      - network
+
+  shop-cart:
+    build:
+      context: https://github.com/Fiap-Pos-Tech-Arquitetura-Java/GoodBuy-ShopCart.git
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_PROFILES_ACTIVE=development
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://shop-cart-db:5434/shop-cart-db
+      - SPRING_DATASOURCE_USERNAME=goodBuy
+      - SPRING_DATASOURCE_PASSWORD=goodBuyShopCart
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
+    networks:
+      - network
+    restart: always
+    depends_on:
+      - config-container
+      - shop-cart-db
+
+  shop-cart-db:
+    image: postgres:latest
+    command: -p 5434
+    environment:
+      POSTGRES_DB: shop-cart-db
+      POSTGRES_USER: goodBuy
+      POSTGRES_PASSWORD: goodBuyShopCart
+    networks:
+      - network
+
+  payment:
+    build:
+      context: https://github.com/Fiap-Pos-Tech-Arquitetura-Java/GoodBuy-Payment.git
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_PROFILES_ACTIVE=development
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://payment-db:5435/payment-db
+      - SPRING_DATASOURCE_USERNAME=goodBuy
+      - SPRING_DATASOURCE_PASSWORD=goodBuyPayment
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
+    networks:
+      - network
+    restart: always
+    depends_on:
+      - config-container
+      - payment-db
+
+  payment-db:
+    image: postgres:latest
+    command: -p 5435
+    environment:
+      POSTGRES_DB: payment-db
+      POSTGRES_USER: goodBuy
+      POSTGRES_PASSWORD: goodBuyPayment
+    networks:
+      - network
+
+  gateway:
+    build:
+      context: .
+    ports:
+      - "80:80"
+    environment:
+      - SPRING_PROFILES_ACTIVE=development
+    networks:
+      - network
+    restart: always
+    depends_on:
+      - config-container
+      - user
+      - item
+      - shop-cart
+      - payment
+
+  config-container:
+    build:
+      context: https://github.com/Fiap-Pos-Tech-Arquitetura-Java/GoodBuy-Config.git
+    command: -p 8085
+    ports:
+      - 8085:8085
+    networks:
+      - network
+
+networks:
+  network:
