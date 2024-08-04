@@ -33,16 +33,16 @@ public class HackaPayApplication {
                         .and()
                         .not( p->p.path("/api/user/findByLogin/**"))
                         .filters(f -> f.stripPrefix(1))
-                        .uri("http://" + user + ":8080" + user))
+                        .uri("http://" + user + ":8080/" + user))
                 .route("cliente", r -> r.path("/api/cliente/**")
                         .filters(f -> f.stripPrefix(1))
-                        .uri("http://" + cliente + ":8081" + cliente))
+                        .uri("http://" + cliente + ":8081/" + cliente))
                 .route("cartao", r -> r.path("/api/cartao/**")
                         .filters(f -> f.stripPrefix(1))
-                        .uri("http://" + cartao + ":8082" + cartao))
+                        .uri("http://" + cartao + ":8082/" + cartao))
                 .route("pagamento", r -> r.path("/api/pagamentos/**")
                         .filters(f -> f.stripPrefix(1))
-                        .uri("http://" + pagamentos + ":8083" + pagamentos))
+                        .uri("http://" + pagamentos + ":8083/" + pagamentos))
                 .build();
     }
 }
