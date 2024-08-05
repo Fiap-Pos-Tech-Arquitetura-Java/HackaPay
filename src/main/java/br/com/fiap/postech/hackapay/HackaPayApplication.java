@@ -14,35 +14,23 @@ public class HackaPayApplication {
         SpringApplication.run(HackaPayApplication.class, args);
     }
 
-    @Value("${hackapay.user}")
-    String user;
-
-    @Value("${hackapay.cliente}")
-    String cliente;
-
-    @Value("${hackapay.cartao}")
-    String cartao;
-
-    @Value("${hackapay.pagamentos}")
-    String pagamentos;
-
     @Bean
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route("usuario", r -> r.path("/api/user/**")
-                        .and()
-                        .not( p->p.path("/api/user/findByLogin/**"))
-                        .filters(f -> f.stripPrefix(1))
-                        .uri("http://" + user + ":8080/" + user))
+                .route("autenticacao", r -> r.path("/api/autenticacao/**")
+                        .uri("http://user:8080/api/autenticacao"))
                 .route("cliente", r -> r.path("/api/cliente/**")
-                        .filters(f -> f.stripPrefix(1))
-                        .uri("http://" + cliente + ":8081/" + cliente))
+                        .uri("http://cliente:8081/api/cliente"))
+                .route("usuario", r -> r.path("/api/usuario/**")
+                        .and()
+                        .not( p->p.path("/api/usuario/findByLogin/**"))
+                        .uri("http://usuario:8080/api/usuario"))
                 .route("cartao", r -> r.path("/api/cartao/**")
-                        .filters(f -> f.stripPrefix(1))
-                        .uri("http://" + cartao + ":8082/" + cartao))
-                .route("pagamento", r -> r.path("/api/pagamentos/**")
-                        .filters(f -> f.stripPrefix(1))
-                        .uri("http://" + pagamentos + ":8083/" + pagamentos))
+                        .uri("http://cartao:8082/api/cartao"))
+                .route("pagamento", r -> r.path("/api/pagamento/**")
+                        .uri("http://pagamento:8083/api/pagamento"))
+                .route("pagamento-cliente", r -> r.path("/api/pagamento/cliente/**")
+                        .uri("http://pagamento:8083/api/pagamento/cliente"))
                 .build();
     }
 }
