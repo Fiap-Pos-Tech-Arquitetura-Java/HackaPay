@@ -18,7 +18,7 @@ public class HackaPayApplication {
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route("autenticacao", r -> r.path("/api/autenticacao/**")
-                        .uri("http://user:8080/api/autenticacao"))
+                        .uri("http://usuario:8080/api/autenticacao"))
                 .route("cliente", r -> r.path("/api/cliente/**")
                         .uri("http://cliente:8081/api/cliente"))
                 .route("usuario", r -> r.path("/api/usuario/**")
