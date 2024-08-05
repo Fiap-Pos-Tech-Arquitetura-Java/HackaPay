@@ -1,12 +1,12 @@
 services:
-  user:
+  usuario:
     build:
       context: https://github.com/Fiap-Pos-Tech-Arquitetura-Java/HackaPay-Usuario.git
     ports:
       - "8080:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=development
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://user-db:5432/user-db
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://usuario-db:5432/user-db
       - SPRING_DATASOURCE_USERNAME=hackaPay
       - SPRING_DATASOURCE_PASSWORD=hackaPayUser
       - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
@@ -17,9 +17,9 @@ services:
       - network
     restart: always
     depends_on:
-      - user-db
+      - usuario-db
 
-  user-db:
+  usuario-db:
     image: postgres:latest
     command: -p 5432
     environment:
@@ -114,12 +114,12 @@ services:
     build:
       context: .
     ports:
-      - "80:80"
+      - "8084:8084"
     networks:
       - network
     restart: always
     depends_on:
-      - user
+      - usuario
       - cliente
       - cartao
       - pagamento
