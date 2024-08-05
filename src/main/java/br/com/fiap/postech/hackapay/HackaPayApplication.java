@@ -27,10 +27,10 @@ public class HackaPayApplication {
                         .uri("http://usuario:8080/api/usuario"))
                 .route("cartao", r -> r.path("/api/cartao/**")
                         .uri("http://cartao:8082/api/cartao"))
-                .route("pagamento", r -> r.path("/api/pagamento/**")
-                        .uri("http://pagamento:8083/api/pagamento"))
-                .route("pagamento-cliente", r -> r.path("/api/pagamento/cliente/**")
-                        .uri("http://pagamento:8083/api/pagamento/cliente"))
+                .route("pagamento", r -> r.path("/api/pagamentos/**")
+                        .uri("http://pagamento:8083/api/pagamentos"))
+                .route("pagamentos-cliente", r -> r.path("/api/pagamentos/cliente/**")
+                        .uri("http://pagamento:8083/api/pagamentos/cliente"))
                 .build();
     }
 }
