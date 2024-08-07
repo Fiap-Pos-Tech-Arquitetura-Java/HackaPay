@@ -114,7 +114,7 @@ services:
     build:
       context: .
     ports:
-      - "8084:8084"
+      - "80:80"
     networks:
       - network
     restart: always
